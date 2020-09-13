@@ -11,6 +11,20 @@ EnglishVersion ->_->:https://github.com/jiang111/awesome-android-tips/blob/maste
 
 # ![Table of Contents](https://raw.githubusercontent.com/jiang111/awesome-android-tips/master/img/toc.png)
 
+* BuildConfig.DEBUG中的DEBUG值为true或者false不是取决于你的buildType,而是取决于buildTypes中的debuggable字段,比如:
+```
+buildTypes {
+        release {
+            debuggable true   //即使是release模式,但是由于debuggable是true,所以它的BuildConfig.DEBUG值依然是true
+        }
+        debug {
+	    debuggable false //即使是debug模式,但是由于debuggable是false,所以它的BuildConfig.DEBUG值依然是false
+        }
+    }
+```
+所以正常情况下不要配置debuggable字段
+
+
 * setBackgroundResource(0) 可以移除 View 的背景色
 
 * Resources.getSystem().getDisplayMetrics().density 可以不用 Context 也能获取屏幕密度哦
@@ -753,6 +767,30 @@ configurations.all {
 }
 ```
 
+* Android library中的混淆需要使用consumerProguardFiles来配置,而不是proguardFiles
+
+
+* ViewPager结合SwipeRefreshLayout的时候,建议对ViewPager添加如下代码:
+```
+viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+	    //禁止swipeRefreshLayout拿上下滑动的手势
+                swipeRefreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+
+            }
+        });
+```
 
 
 #### 摘自[如下地址](https://github.com/jiang111/awesome-android-tips/blob/master/Authors.md)
